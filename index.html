@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
   <meta charset="UTF-8" />
@@ -7,53 +7,52 @@
   <style>
     *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#eef4f7;color:#17212b}
     .app{max-width:430px;margin:0 auto;min-height:100vh;background:#fff}
-    .screen{display:none;padding-bottom:90px;min-height:100vh}.screen.active{display:block}
+    .screen{display:none;min-height:100vh;padding-bottom:86px}.active{display:block}
     .header{background:linear-gradient(135deg,#0ea5e9,#06b6d4);color:#fff;padding:18px}
-    .top{display:flex;justify-content:space-between;font-size:12px;opacity:.9;margin-bottom:16px}
-    .title{font-size:30px;font-weight:700;margin:0}
-    .sub{margin:6px 0 0;font-size:13px;opacity:.9}
+    .top{display:flex;justify-content:space-between;font-size:12px;opacity:.9;margin-bottom:14px}
+    h1,h2,h3,p{margin:0}
+    .sub{margin-top:6px;font-size:13px;opacity:.92}
     .content{padding:16px}
     .card{background:#fff;border:1px solid #e2e8f0;border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 8px 24px rgba(0,0,0,.05)}
     .hero{background:linear-gradient(135deg,#eff9ff,#f0fdfa)}
     .badge{display:inline-block;background:#e0f2fe;color:#0369a1;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700;margin-bottom:8px}
-    .btn{width:100%;border:0;border-radius:14px;padding:14px 16px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px}
-    .btn-primary{background:#091736;color:#fff}.btn-secondary{background:#0f9dc1;color:#fff}.btn-light{background:#e0f2fe;color:#075985}
     .input,.select,.textarea{width:100%;border:1px solid #dbe4ee;border-radius:14px;padding:13px 14px;font-size:14px;margin-top:10px}
-    .textarea{min-height:100px;resize:vertical}
-    .products{display:grid;gap:14px}
-    .product{background:#fff;border:1px solid #e2e8f0;border-radius:22px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.05)}
-    .product img{width:100%;height:210px;object-fit:cover;display:block}
-    .pbody{padding:14px}
+    .textarea{min-height:90px;resize:vertical}
+    .btn{width:100%;border:0;border-radius:14px;padding:14px 16px;font-size:15px;font-weight:700;cursor:pointer;margin-top:10px}
+    .primary{background:#091736;color:#fff}.secondary{background:#0f9dc1;color:#fff}.light{background:#e0f2fe;color:#075985}
+    .small{width:auto;padding:10px 12px;margin-top:0;font-size:13px}
     .row{display:flex;justify-content:space-between;align-items:center;gap:10px}
     .muted{color:#5b6875}.price{font-weight:800;font-size:22px;white-space:nowrap}
+    .product{background:#fff;border:1px solid #e2e8f0;border-radius:22px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.05);margin-bottom:14px}
+    .product img{width:100%;height:210px;object-fit:cover;display:block}
+    .pbody{padding:14px}
     .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-    .small{width:auto;padding:10px 12px;margin-top:0;font-size:13px}
     .empty{border:1px dashed #cbd5e1;border-radius:18px;padding:18px;text-align:center;color:#64748b}
     .bottom{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:430px;background:#fff;border-top:1px solid #e2e8f0;display:grid;grid-template-columns:repeat(4,1fr);padding:10px 8px 12px}
-    .nav{text-align:center;color:#64748b;font-size:12px;cursor:pointer}.nav strong{display:block;font-size:21px;margin-bottom:4px}.nav.active{color:#0284c7;font-weight:700}
-    .qty{display:flex;align-items:center;gap:8px}.qty button{width:32px;height:32px;border:0;border-radius:10px;background:#e2e8f0;font-weight:700}
+    .nav{text-align:center;color:#64748b;font-size:12px;cursor:pointer}.nav strong{display:block;font-size:20px;margin-bottom:4px}.nav.on{color:#0284c7;font-weight:700}
+    .qty{display:flex;align-items:center;gap:8px}.qty button{width:30px;height:30px;border:0;border-radius:10px;background:#e2e8f0}
   </style>
 </head>
 <body>
   <div class="app">
-    <div class="screen active" id="loginScreen">
+    <div id="login" class="screen active">
       <div class="content" style="padding-top:60px">
         <div class="card" style="text-align:center">
-          <div style="font-size:54px">💧</div>
+          <div style="font-size:52px">💧</div>
           <h1 style="margin:10px 0 6px">Sukolik</h1>
           <p class="muted">Su arıtma cihazı, filtre ve servis işlemlerini tek uygulamada yönetin.</p>
-          <input class="input" id="loginName" placeholder="Ad Soyad">
-          <input class="input" id="loginPhone" placeholder="Telefon">
-          <input class="input" id="loginAddress" placeholder="Adres">
-          <button class="btn btn-primary" id="loginBtn">Uygulamaya Gir</button>
+          <input id="name" class="input" placeholder="Ad Soyad">
+          <input id="phone" class="input" placeholder="Telefon">
+          <input id="address" class="input" placeholder="Adres">
+          <button id="loginBtn" class="btn primary">Uygulamaya Gir</button>
         </div>
       </div>
     </div>
 
-    <div class="screen" id="homeScreen">
+    <div id="home" class="screen">
       <div class="header">
         <div class="top"><span>09:41</span><span>5G • 100%</span></div>
-        <h1 class="title" id="welcomeTitle">Sukolik</h1>
+        <h1 id="welcome">Sukolik</h1>
         <p class="sub">Temiz su çözümleri cebinde</p>
       </div>
       <div class="content">
@@ -61,414 +60,272 @@
           <div class="badge">Özel Kampanya</div>
           <h2 style="margin:6px 0 8px">Premium cihazlarda ücretsiz kurulum</h2>
           <p class="muted">Ürünleri incele, sepete ekle, sipariş ver veya servis talebi oluştur.</p>
-          <button class="btn btn-primary" data-screen="catalogScreen">Mağazaya Git</button>
+          <button id="goStore1" class="btn primary">Mağazaya Git</button>
         </div>
-
         <div class="card">
           <div class="row">
-            <h2 style="margin:0">Öne Çıkan Ürünler</h2>
-            <button class="btn btn-light small" data-screen="catalogScreen">Tümünü Gör</button>
+            <h2>Öne Çıkan Ürünler</h2>
+            <button id="goStore2" class="btn light small">Tümünü Gör</button>
           </div>
         </div>
-
-        <div class="products" id="featuredProducts"></div>
+        <div id="featured"></div>
       </div>
     </div>
 
-    <div class="screen" id="catalogScreen">
+    <div id="store" class="screen">
       <div class="header">
         <div class="top"><span>09:41</span><span>Mağaza</span></div>
-        <h1 class="title">Ürünler</h1>
+        <h1>Ürünler</h1>
         <p class="sub">Cihaz, filtre ve aksesuarlar</p>
       </div>
       <div class="content">
-        <input class="input" id="searchInput" placeholder="Ürün ara...">
-        <select class="select" id="categoryFilter">
+        <input id="search" class="input" placeholder="Ürün ara...">
+        <select id="category" class="select">
           <option value="Tümü">Tüm Kategoriler</option>
           <option value="Cihaz">Cihaz</option>
           <option value="Filtre">Filtre</option>
           <option value="Aksesuar">Aksesuar</option>
         </select>
-        <div class="products" id="catalogProducts" style="margin-top:14px"></div>
+        <div id="storeList" style="margin-top:14px"></div>
       </div>
     </div>
 
-    <div class="screen" id="detailScreen">
-      <div class="header">
-        <div class="top"><span>09:41</span><span>Ürün Detayı</span></div>
-        <h1 class="title">Detay</h1>
-        <p class="sub">Ürünü incele ve sepete ekle</p>
-      </div>
-      <div class="content" id="detailContent"></div>
-    </div>
-
-    <div class="screen" id="cartScreen">
+    <div id="cart" class="screen">
       <div class="header">
         <div class="top"><span>09:41</span><span>Sepet</span></div>
-        <h1 class="title">Sepetim</h1>
+        <h1>Sepetim</h1>
         <p class="sub">Siparişini tamamla</p>
       </div>
       <div class="content">
-        <div id="cartItems"></div>
-        <div class="card">
-          <div class="row"><span>Toplam</span><strong id="cartTotal">₺0</strong></div>
-        </div>
-        <button class="btn btn-primary" id="goCheckoutBtn">Siparişi Tamamla</button>
+        <div id="cartList"></div>
+        <div class="card"><div class="row"><span>Toplam</span><strong id="total">₺0</strong></div></div>
+        <button id="checkoutBtn" class="btn primary">Siparişi WhatsApp ile Ver</button>
       </div>
     </div>
 
-    <div class="screen" id="checkoutScreen">
-      <div class="header">
-        <div class="top"><span>09:41</span><span>Ödeme</span></div>
-        <h1 class="title">Sipariş Formu</h1>
-        <p class="sub">Bilgilerini doldur</p>
-      </div>
-      <div class="content">
-        <div class="card">
-          <div class="badge">Teslimat Bilgileri</div>
-          <input class="input" id="checkoutName" placeholder="Ad Soyad">
-          <input class="input" id="checkoutPhone" placeholder="Telefon">
-          <textarea class="textarea" id="checkoutAddress" placeholder="Adres"></textarea>
-          <select class="select" id="checkoutPayment">
-            <option>Kapıda ödeme</option>
-            <option>Havale / EFT</option>
-            <option>Kredi kartı</option>
-          </select>
-          <button class="btn btn-secondary" id="sendOrderBtn">WhatsApp ile Sipariş Ver</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="screen" id="serviceScreen">
+    <div id="service" class="screen">
       <div class="header">
         <div class="top"><span>09:41</span><span>Servis</span></div>
-        <h1 class="title">Servis Talebi</h1>
+        <h1>Servis Talebi</h1>
         <p class="sub">Bakım, kurulum veya filtre değişimi</p>
       </div>
       <div class="content">
         <div class="card">
-          <div class="badge">Hızlı Servis</div>
-          <input class="input" id="serviceName" placeholder="Ad Soyad">
-          <input class="input" id="servicePhone" placeholder="Telefon">
-          <select class="select" id="serviceType">
+          <input id="svcName" class="input" placeholder="Ad Soyad">
+          <input id="svcPhone" class="input" placeholder="Telefon">
+          <select id="svcType" class="select">
             <option>Filtre değişimi</option>
             <option>Arıza kaydı</option>
             <option>Kurulum talebi</option>
             <option>Bakım talebi</option>
           </select>
-          <textarea class="textarea" id="serviceNote" placeholder="Talebinizi yazın"></textarea>
-          <button class="btn btn-primary" id="serviceSubmitBtn">Servis Talebi Gönder</button>
+          <textarea id="svcNote" class="textarea" placeholder="Talebinizi yazın"></textarea>
+          <button id="svcBtn" class="btn secondary">Servis Talebi Gönder</button>
         </div>
       </div>
     </div>
 
-    <div class="screen" id="profileScreen">
+    <div id="profile" class="screen">
       <div class="header">
         <div class="top"><span>09:41</span><span>Profil</span></div>
-        <h1 class="title" id="profileName">Müşteri</h1>
-        <p class="sub">Hesap ve geçmiş işlemler</p>
+        <h1 id="pName">Müşteri</h1>
+        <p class="sub">Hesap bilgileri</p>
       </div>
       <div class="content">
         <div class="card">
-          <div class="badge">Bilgilerim</div>
-          <p id="profilePhone" class="muted">Telefon: -</p>
-          <p id="profileAddress" class="muted">Adres: -</p>
-        </div>
-        <div class="card">
-          <h3 style="margin-top:0">Sipariş Geçmişi</h3>
-          <div id="orderHistory"></div>
-        </div>
-        <div class="card">
-          <h3 style="margin-top:0">Servis Geçmişi</h3>
-          <div id="serviceHistory"></div>
+          <p id="pPhone" class="muted">Telefon: -</p>
+          <p id="pAddress" class="muted" style="margin-top:8px">Adres: -</p>
         </div>
       </div>
     </div>
 
-    <div class="bottom" id="bottomNav" style="display:none">
-      <div class="nav active" data-screen="homeScreen"><strong>🏠</strong>Ana Sayfa</div>
-      <div class="nav" data-screen="catalogScreen"><strong>🛒</strong>Mağaza</div>
-      <div class="nav" data-screen="serviceScreen"><strong>🔧</strong>Servis</div>
-      <div class="nav" data-screen="profileScreen"><strong>👤</strong>Profil</div>
+    <div id="bottom" class="bottom" style="display:none">
+      <div class="nav on" data-go="home"><strong>🏠</strong>Ana Sayfa</div>
+      <div class="nav" data-go="store"><strong>🛒</strong>Mağaza</div>
+      <div class="nav" data-go="service"><strong>🔧</strong>Servis</div>
+      <div class="nav" data-go="profile"><strong>👤</strong>Profil</div>
     </div>
   </div>
 
   <script>
-    const PHONE_NUMBER = '905442346384';
-    const PRODUCTS = [
-      {id:1,name:'Premium Su Arıtma Cihazı',category:'Cihaz',price:12999,badge:'En Çok Satan',feature:'7 aşamalı filtreleme ve yüksek performans',image:'https://images.unsplash.com/photo-1563453392212-326f5e854473?q=80&w=1200&auto=format&fit=crop',details:['7 aşamalı filtre sistemi','Ücretsiz kurulum','2 yıl servis desteği']},
-      {id:2,name:'Kompakt Mutfak Altı Sistem',category:'Cihaz',price:8999,badge:'Kampanya',feature:'Dar alanlar için kompakt tasarım',image:'https://images.unsplash.com/photo-1559839914-17aae19cec71?q=80&w=1200&auto=format&fit=crop',details:['Kompakt gövde','Düşük enerji tüketimi','Sessiz çalışma']},
-      {id:3,name:'Yıllık Filtre Seti',category:'Filtre',price:1999,badge:'Filtre Paketi',feature:'12 aylık kullanım için komple set',image:'https://images.unsplash.com/photo-1523362628745-0c100150b504?q=80&w=1200&auto=format&fit=crop',details:['Sediment filtre','Karbon filtre','Membran uyumlu']},
-      {id:4,name:'Alkali Filtre Kartuşu',category:'Filtre',price:799,badge:'Yeni',feature:'Mineral ve pH dengesi desteği',image:'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop',details:['Hızlı değişim','Uyumlu bağlantı','Sağlıklı mineral desteği']},
-      {id:5,name:'Musluk Seti',category:'Aksesuar',price:649,badge:'Aksesuar',feature:'Şık ve dayanıklı musluk seti',image:'https://images.unsplash.com/photo-1502741338009-cac2772e18bc?q=80&w=1200&auto=format&fit=crop',details:['Paslanmaz yüzey','Kolay kurulum','Şık görünüm']}
+    const PHONE = '905442346384';
+    const products = [
+      {id:1,name:'Premium Su Arıtma Cihazı',cat:'Cihaz',price:12999,badge:'En Çok Satan',text:'7 aşamalı filtreleme ve yüksek performans',img:'https://images.unsplash.com/photo-1563453392212-326f5e854473?q=80&w=1200&auto=format&fit=crop'},
+      {id:2,name:'Kompakt Mutfak Altı Sistem',cat:'Cihaz',price:8999,badge:'Kampanya',text:'Dar alanlar için kompakt tasarım',img:'https://images.unsplash.com/photo-1559839914-17aae19cec71?q=80&w=1200&auto=format&fit=crop'},
+      {id:3,name:'Yıllık Filtre Seti',cat:'Filtre',price:1999,badge:'Filtre Paketi',text:'12 aylık kullanım için komple set',img:'https://images.unsplash.com/photo-1523362628745-0c100150b504?q=80&w=1200&auto=format&fit=crop'},
+      {id:4,name:'Alkali Filtre Kartuşu',cat:'Filtre',price:799,badge:'Yeni',text:'Mineral ve pH dengesi desteği',img:'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1200&auto=format&fit=crop'}
     ];
 
-    const keys = {
-      cart: 'sukolik_cart_v3',
-      profile: 'sukolik_profile_v3',
-      orders: 'sukolik_orders_v3',
-      services: 'sukolik_services_v3'
-    };
+    const $ = id => document.getElementById(id);
+    const money = n => '₺' + Number(n).toLocaleString('tr-TR');
+    let cart = JSON.parse(localStorage.getItem('sukolik_cart') || '[]');
+    let profile = JSON.parse(localStorage.getItem('sukolik_profile') || '{}');
 
-    function money(v){ return '₺' + Number(v || 0).toLocaleString('tr-TR'); }
-    function get(key, fallback){ try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } }
-    function set(key, value){ localStorage.setItem(key, JSON.stringify(value)); }
-
-    function showScreen(id){
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      const target = document.getElementById(id);
-      if (target) target.classList.add('active');
-      document.querySelectorAll('.nav').forEach(n => n.classList.remove('active'));
-      const nav = document.querySelector(`.nav[data-screen="${id}"]`);
-      if (nav) nav.classList.add('active');
-      if (id === 'homeScreen') renderFeatured();
-      if (id === 'catalogScreen') renderCatalog();
-      if (id === 'cartScreen') renderCart();
-      if (id === 'profileScreen') renderProfile();
+    function save(){
+      localStorage.setItem('sukolik_cart', JSON.stringify(cart));
+      localStorage.setItem('sukolik_profile', JSON.stringify(profile));
     }
 
-    function hydrateProfile(){
-      const p = get(keys.profile, {});
-      document.getElementById('welcomeTitle').textContent = p.name || 'Sukolik';
-      document.getElementById('profileName').textContent = p.name || 'Müşteri';
-      document.getElementById('profilePhone').textContent = 'Telefon: ' + (p.phone || '-');
-      document.getElementById('profileAddress').textContent = 'Adres: ' + (p.address || '-');
-      document.getElementById('serviceName').value = p.name || '';
-      document.getElementById('servicePhone').value = p.phone || '';
-      document.getElementById('checkoutName').value = p.name || '';
-      document.getElementById('checkoutPhone').value = p.phone || '';
-      document.getElementById('checkoutAddress').value = p.address || '';
+    function screen(id){
+      document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
+      $(id).classList.add('active');
+      document.querySelectorAll('.nav').forEach(x => x.classList.remove('on'));
+      const nav = document.querySelector(`[data-go="${id}"]`);
+      if (nav) nav.classList.add('on');
     }
 
-    function login(){
-      const profile = {
-        name: document.getElementById('loginName').value || 'Müşteri',
-        phone: document.getElementById('loginPhone').value || '',
-        address: document.getElementById('loginAddress').value || ''
-      };
-      set(keys.profile, profile);
-      document.getElementById('bottomNav').style.display = 'grid';
-      hydrateProfile();
-      showScreen('homeScreen');
+    function hydrate(){
+      $('welcome').textContent = profile.name || 'Sukolik';
+      $('pName').textContent = profile.name || 'Müşteri';
+      $('pPhone').textContent = 'Telefon: ' + (profile.phone || '-');
+      $('pAddress').textContent = 'Adres: ' + (profile.address || '-');
+      $('svcName').value = profile.name || '';
+      $('svcPhone').value = profile.phone || '';
     }
 
-    function productHTML(p){
+    function productCard(p){
       return `
         <div class="product">
-          <img src="${p.image}" alt="${p.name}">
+          <img src="${p.img}" alt="${p.name}">
           <div class="pbody">
             <div class="badge">${p.badge}</div>
             <div class="row">
               <div>
                 <h3 style="margin:0 0 6px">${p.name}</h3>
-                <p class="muted" style="margin:0">${p.feature}</p>
+                <p class="muted">${p.text}</p>
               </div>
               <div class="price">${money(p.price)}</div>
             </div>
             <div class="actions">
-              <button class="btn btn-light small" data-open="${p.id}">İncele</button>
-              <button class="btn btn-primary small" data-add="${p.id}">Sepete Ekle</button>
+              <button class="btn primary small" onclick="addCart(${p.id})">Sepete Ekle</button>
             </div>
           </div>
-        </div>
-      `;
+        </div>`;
     }
 
     function renderFeatured(){
-      document.getElementById('featuredProducts').innerHTML = PRODUCTS.slice(0,3).map(productHTML).join('');
+      $('featured').innerHTML = products.slice(0,2).map(productCard).join('');
     }
 
-    function renderCatalog(){
-      const q = (document.getElementById('searchInput').value || '').toLowerCase();
-      const c = document.getElementById('categoryFilter').value;
-      const filtered = PRODUCTS.filter(p =>
-        (c === 'Tümü' || p.category === c) &&
-        (!q || p.name.toLowerCase().includes(q) || p.feature.toLowerCase().includes(q))
-      );
-      document.getElementById('catalogProducts').innerHTML =
-        filtered.length ? filtered.map(productHTML).join('') : '<div class="empty">Ürün bulunamadı.</div>';
+    function renderStore(){
+      const q = $('search').value.toLowerCase();
+      const c = $('category').value;
+      const list = products.filter(p => (c === 'Tümü' || p.cat === c) && (!q || p.name.toLowerCase().includes(q) || p.text.toLowerCase().includes(q)));
+      $('storeList').innerHTML = list.length ? list.map(productCard).join('') : '<div class="empty">Ürün bulunamadı.</div>';
     }
 
-    function openProduct(id){
-      const p = PRODUCTS.find(x => x.id === id);
-      if (!p) return;
-      document.getElementById('detailContent').innerHTML = `
-        <div class="card">
-          <img class="detail-image" src="${p.image}" alt="${p.name}">
-          <div class="badge" style="margin-top:14px">${p.badge}</div>
-          <div class="row">
-            <div>
-              <h2 style="margin:0 0 8px">${p.name}</h2>
-              <p class="muted" style="margin:0">${p.feature}</p>
-            </div>
-            <div class="price">${money(p.price)}</div>
-          </div>
-          <div style="margin-top:14px">
-            ${p.details.map(d => `<div style="padding:10px 0;border-bottom:1px solid #edf2f7">${d}</div>`).join('')}
-          </div>
-          <button class="btn btn-primary" data-add="${p.id}">Sepete Ekle</button>
-          <button class="btn btn-light" data-screen="catalogScreen">Mağazaya Dön</button>
-        </div>
-      `;
-      showScreen('detailScreen');
-    }
-
-    function addToCart(id){
-      const p = PRODUCTS.find(x => x.id === id);
-      if (!p) return;
-      const cart = get(keys.cart, []);
-      const found = cart.find(x => x.id === id);
-      if (found) found.qty += 1;
-      else cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
-      set(keys.cart, cart);
+    function addCart(id){
+      const p = products.find(x => x.id === id);
+      const f = cart.find(x => x.id === id);
+      if (f) f.qty++;
+      else cart.push({id:p.id,name:p.name,price:p.price,qty:1});
+      save();
       renderCart();
-      showScreen('cartScreen');
+      screen('cart');
     }
 
-    function updateQty(id, delta){
-      let cart = get(keys.cart, []).map(i => i.id === id ? { ...i, qty: i.qty + delta } : i).filter(i => i.qty > 0);
-      set(keys.cart, cart);
+    function qty(id, d){
+      cart = cart.map(x => x.id === id ? {...x, qty:x.qty + d} : x).filter(x => x.qty > 0);
+      save();
       renderCart();
     }
 
     function renderCart(){
-      const cart = get(keys.cart, []);
-      const el = document.getElementById('cartItems');
       if (!cart.length) {
-        el.innerHTML = '<div class="empty">Sepetinde ürün yok.</div>';
-        document.getElementById('cartTotal').textContent = money(0);
+        $('cartList').innerHTML = '<div class="empty">Sepetinde ürün yok.</div>';
+        $('total').textContent = money(0);
         return;
       }
-      el.innerHTML = cart.map(i => `
+      $('cartList').innerHTML = cart.map(i => `
         <div class="card">
           <div class="row">
             <div>
               <strong>${i.name}</strong>
-              <p class="muted" style="margin:6px 0 0">${money(i.price)} / adet</p>
+              <p class="muted" style="margin-top:6px">${money(i.price)} / adet</p>
             </div>
             <div class="qty">
-              <button data-minus="${i.id}">−</button>
+              <button onclick="qty(${i.id},-1)">−</button>
               <strong>${i.qty}</strong>
-              <button data-plus="${i.id}">+</button>
+              <button onclick="qty(${i.id},1)">+</button>
             </div>
           </div>
           <div style="padding-top:10px"><strong>${money(i.price * i.qty)}</strong></div>
         </div>
       `).join('');
-      document.getElementById('cartTotal').textContent = money(cart.reduce((s, i) => s + i.price * i.qty, 0));
+      $('total').textContent = money(cart.reduce((s,i) => s + i.price * i.qty, 0));
     }
 
     function sendOrder(){
-      const cart = get(keys.cart, []);
-      if (!cart.length) { alert('Önce sepete ürün ekleyin.'); return; }
-
-      const name = document.getElementById('checkoutName').value || 'Müşteri';
-      const phone = document.getElementById('checkoutPhone').value || '-';
-      const address = document.getElementById('checkoutAddress').value || '-';
-      const payment = document.getElementById('checkoutPayment').value || 'Kapıda ödeme';
-
-      set(keys.profile, { name, phone, address });
-      hydrateProfile();
-
-      const lines = cart.map(i => `${i.name} x${i.qty} = ${money(i.price * i.qty)}`).join('\\n');
-      const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      if (!cart.length) { alert('Sepetin boş.'); return; }
+      const lines = cart.map(i => `${i.name} x${i.qty} = ${money(i.price * i.qty)}`).join('\n');
+      const total = cart.reduce((s,i) => s + i.price * i.qty, 0);
       const text = [
         'Merhaba, Sukolik uygulamasından sipariş vermek istiyorum.',
         '',
-        'Ad Soyad: ' + name,
-        'Telefon: ' + phone,
-        'Adres: ' + address,
-        'Ödeme: ' + payment,
+        'Ad Soyad: ' + (profile.name || '-'),
+        'Telefon: ' + (profile.phone || '-'),
+        'Adres: ' + (profile.address || '-'),
         '',
         'Ürünler:',
         lines,
         '',
         'Toplam: ' + money(total)
-      ].join('\\n');
-
-      const orders = get(keys.orders, []);
-      orders.unshift({ total, createdAt: new Date().toLocaleString('tr-TR'), status: 'Sipariş Alındı' });
-      set(keys.orders, orders);
-      set(keys.cart, []);
-      renderCart();
-      window.open('https://wa.me/' + PHONE_NUMBER + '?text=' + encodeURIComponent(text), '_blank');
-      showScreen('homeScreen');
+      ].join('\n');
+      window.open('https://wa.me/' + PHONE + '?text=' + encodeURIComponent(text), '_blank');
     }
 
-    function submitService(){
-      const name = document.getElementById('serviceName').value || 'Müşteri';
-      const phone = document.getElementById('servicePhone').value || '-';
-      const type = document.getElementById('serviceType').value;
-      const note = document.getElementById('serviceNote').value || '-';
-
-      const services = get(keys.services, []);
-      services.unshift({ type, note, createdAt: new Date().toLocaleString('tr-TR'), status: 'Talep Alındı' });
-      set(keys.services, services);
-
+    function sendService(){
       const text = [
         'Merhaba, servis talebi oluşturmak istiyorum.',
         '',
-        'Ad Soyad: ' + name,
-        'Telefon: ' + phone,
-        'Talep Türü: ' + type,
-        'Not: ' + note
-      ].join('\\n');
-
-      window.open('https://wa.me/' + PHONE_NUMBER + '?text=' + encodeURIComponent(text), '_blank');
-      document.getElementById('serviceNote').value = '';
-      renderProfile();
-      showScreen('profileScreen');
+        'Ad Soyad: ' + ($('svcName').value || '-'),
+        'Telefon: ' + ($('svcPhone').value || '-'),
+        'Talep Türü: ' + $('svcType').value,
+        'Not: ' + ($('svcNote').value || '-')
+      ].join('\n');
+      window.open('https://wa.me/' + PHONE + '?text=' + encodeURIComponent(text), '_blank');
     }
 
-    function renderProfile(){
-      hydrateProfile();
-      const orders = get(keys.orders, []);
-      const services = get(keys.services, []);
-      document.getElementById('orderHistory').innerHTML =
-        orders.length ? orders.map(o => `<div class="card"><strong>${money(o.total)}</strong><p class="muted" style="margin:8px 0 0">${o.createdAt}</p><div class="badge" style="margin-top:10px">${o.status}</div></div>`).join('')
-        : '<div class="empty">Henüz sipariş geçmişi yok.</div>';
+    $('loginBtn').onclick = function(){
+      profile = {
+        name: $('name').value || 'Müşteri',
+        phone: $('phone').value || '',
+        address: $('address').value || ''
+      };
+      save();
+      $('bottom').style.display = 'grid';
+      hydrate();
+      renderFeatured();
+      renderStore();
+      renderCart();
+      screen('home');
+    };
 
-      document.getElementById('serviceHistory').innerHTML =
-        services.length ? services.map(s => `<div class="card"><strong>${s.type}</strong><p style="margin:8px 0 0">${s.note}</p><p class="muted" style="margin:8px 0 0">${s.createdAt}</p><div class="badge" style="margin-top:10px">${s.status}</div></div>`).join('')
-        : '<div class="empty">Henüz servis geçmişi yok.</div>';
-    }
+    $('goStore1').onclick = () => { renderStore(); screen('store'); };
+    $('goStore2').onclick = () => { renderStore(); screen('store'); };
+    $('search').oninput = renderStore;
+    $('category').onchange = renderStore;
+    $('checkoutBtn').onclick = sendOrder;
+    $('svcBtn').onclick = sendService;
 
-    document.getElementById('loginBtn').addEventListener('click', login);
-    document.getElementById('searchInput').addEventListener('input', renderCatalog);
-    document.getElementById('categoryFilter').addEventListener('change', renderCatalog);
-    document.getElementById('campaignBtn').addEventListener('click', () => showScreen('catalogScreen'));
-    document.getElementById('goCheckoutBtn').addEventListener('click', () => {
-      if (!get(keys.cart, []).length) { alert('Sepetin boş.'); return; }
-      showScreen('checkoutScreen');
-    });
-    document.getElementById('sendOrderBtn').addEventListener('click', sendOrder);
-    document.getElementById('serviceSubmitBtn').addEventListener('click', submitService);
-
-    document.addEventListener('click', function(e){
-      const s = e.target.closest('[data-screen]');
-      if (s) { showScreen(s.getAttribute('data-screen')); return; }
-
-      const add = e.target.closest('[data-add]');
-      if (add) { addToCart(Number(add.getAttribute('data-add'))); return; }
-
-      const open = e.target.closest('[data-open]');
-      if (open) { openProduct(Number(open.getAttribute('data-open'))); return; }
-
-      const minus = e.target.closest('[data-minus]');
-      if (minus) { updateQty(Number(minus.getAttribute('data-minus')), -1); return; }
-
-      const plus = e.target.closest('[data-plus]');
-      if (plus) { updateQty(Number(plus.getAttribute('data-plus')), 1); return; }
+    document.querySelectorAll('.nav').forEach(n => {
+      n.onclick = () => {
+        const id = n.getAttribute('data-go');
+        if (id === 'store') renderStore();
+        if (id === 'cart') renderCart();
+        if (id === 'profile') hydrate();
+        screen(id);
+      };
     });
 
-    if (get(keys.profile, {}).name || get(keys.profile, {}).phone) {
-      document.getElementById('bottomNav').style.display = 'grid';
-      hydrateProfile();
-      showScreen('homeScreen');
+    if (profile.name || profile.phone) {
+      $('bottom').style.display = 'grid';
+      hydrate();
+      renderFeatured();
+      renderStore();
+      renderCart();
+      screen('home');
     }
-
-    renderFeatured();
-    renderCatalog();
   </script>
 </body>
 </html>
