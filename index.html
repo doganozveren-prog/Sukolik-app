@@ -426,4 +426,49 @@
       const services = get(keys.services, []);
       document.getElementById('orderHistory').innerHTML =
         orders.length ? orders.map(o => `<div class="card"><strong>${money(o.total)}</strong><p class="muted" style="margin:8px 0 0">${o.createdAt}</p><div class="badge" style="margin-top:10px">${o.status}</div></div>`).join('')
-        : '<div class="
+        : '<div class="empty">Henüz sipariş geçmişi yok.</div>';
+
+      document.getElementById('serviceHistory').innerHTML =
+        services.length ? services.map(s => `<div class="card"><strong>${s.type}</strong><p style="margin:8px 0 0">${s.note}</p><p class="muted" style="margin:8px 0 0">${s.createdAt}</p><div class="badge" style="margin-top:10px">${s.status}</div></div>`).join('')
+        : '<div class="empty">Henüz servis geçmişi yok.</div>';
+    }
+
+    document.getElementById('loginBtn').addEventListener('click', login);
+    document.getElementById('searchInput').addEventListener('input', renderCatalog);
+    document.getElementById('categoryFilter').addEventListener('change', renderCatalog);
+    document.getElementById('campaignBtn').addEventListener('click', () => showScreen('catalogScreen'));
+    document.getElementById('goCheckoutBtn').addEventListener('click', () => {
+      if (!get(keys.cart, []).length) { alert('Sepetin boş.'); return; }
+      showScreen('checkoutScreen');
+    });
+    document.getElementById('sendOrderBtn').addEventListener('click', sendOrder);
+    document.getElementById('serviceSubmitBtn').addEventListener('click', submitService);
+
+    document.addEventListener('click', function(e){
+      const s = e.target.closest('[data-screen]');
+      if (s) { showScreen(s.getAttribute('data-screen')); return; }
+
+      const add = e.target.closest('[data-add]');
+      if (add) { addToCart(Number(add.getAttribute('data-add'))); return; }
+
+      const open = e.target.closest('[data-open]');
+      if (open) { openProduct(Number(open.getAttribute('data-open'))); return; }
+
+      const minus = e.target.closest('[data-minus]');
+      if (minus) { updateQty(Number(minus.getAttribute('data-minus')), -1); return; }
+
+      const plus = e.target.closest('[data-plus]');
+      if (plus) { updateQty(Number(plus.getAttribute('data-plus')), 1); return; }
+    });
+
+    if (get(keys.profile, {}).name || get(keys.profile, {}).phone) {
+      document.getElementById('bottomNav').style.display = 'grid';
+      hydrateProfile();
+      showScreen('homeScreen');
+    }
+
+    renderFeatured();
+    renderCatalog();
+  </script>
+</body>
+</html>
