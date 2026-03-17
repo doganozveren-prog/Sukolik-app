@@ -1,226 +1,28 @@
-<!DOCTYPE html>
-<html lang="tr">
+<!DOCTYPE html><html>
 <head>
-  <meta charset="UTF-8" />
-  <link rel="manifest" href="/manifest.json">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sukolik Demo Uygulama</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #eef4f7;
-      color: #17212b;
-    }
-    .app {
-      max-width: 430px;
-      margin: 0 auto;
-      min-height: 100vh;
-      background: #fff;
-      position: relative;
-      overflow: hidden;
-    }
-    .header {
-      background: linear-gradient(135deg, #0ea5e9, #06b6d4);
-      color: white;
-      padding: 18px 18px 22px;
-    }
-    .topline {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      opacity: .95;
-      margin-bottom: 18px;
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-    .brand h1 { margin: 4px 0 0; font-size: 28px; }
-    .brand p { margin: 0; font-size: 13px; opacity: .92; }
-    .drop {
-      width: 48px; height: 48px; border-radius: 16px;
-      background: rgba(255,255,255,.18);
-      display: grid; place-items: center; font-size: 24px;
-    }
-    .search {
-      background: white;
-      border-radius: 16px;
-      padding: 14px;
-      margin-top: 16px;
-      color: #718096;
-      font-size: 14px;
-    }
-    .content { padding: 16px; padding-bottom: 92px; }
-    .card {
-      border-radius: 22px;
-      padding: 18px;
-      background: linear-gradient(135deg, #eff9ff, #f0fdfa);
-      border: 1px solid #d9f1fb;
-      margin-bottom: 16px;
-    }
-    .badge {
-      display: inline-block;
-      background: #e0f2fe;
-      color: #0369a1;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-    h2, h3, h4, p { margin: 0; }
-    .muted { color: #5c6b78; }
-    .cta {
-      margin-top: 14px;
-      background: #0f172a;
-      color: white;
-      border: 0;
-      border-radius: 14px;
-      padding: 12px 16px;
-      font-weight: bold;
-      width: 100%;
-      cursor: pointer;
-    }
-    .section-title {
-      display: flex; justify-content: space-between; align-items: center;
-      margin: 18px 0 12px;
-    }
-    .section-title span { color: #0ea5e9; font-size: 14px; font-weight: bold; }
-    .product {
-      border: 1px solid #e5e7eb;
-      border-radius: 22px;
-      overflow: hidden;
-      margin-bottom: 14px;
-      background: white;
-      box-shadow: 0 8px 20px rgba(0,0,0,.04);
-    }
-    .product img {
-      width: 100%; height: 180px; object-fit: cover; display: block;
-    }
-    .product-body { padding: 14px; }
-    .row { display: flex; justify-content: space-between; gap: 12px; }
-    .price { font-weight: 800; white-space: nowrap; }
-    .chips {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;
-    }
-    .chip {
-      background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 14px; font-size: 14px; font-weight: 600;
-    }
-    .bottom {
-      position: fixed;
-      bottom: 0;
-      left: 50%; transform: translateX(-50%);
-      width: 100%; max-width: 430px;
-      background: white;
-      border-top: 1px solid #e5e7eb;
-      display: grid; grid-template-columns: repeat(4, 1fr);
-      padding: 10px 8px 12px;
-    }
-    .nav {
-      text-align: center; font-size: 12px; color: #64748b;
-    }
-    .nav strong { display: block; font-size: 20px; margin-bottom: 4px; }
-    .nav.active { color: #0284c7; font-weight: bold; }
-    .notice {
-      position: sticky;
-      top: 0;
-      z-index: 2;
-      text-align: center;
-      background: #082f49;
-      color: white;
-      padding: 10px;
-      font-size: 13px;
-    }
-  </style>
+<title>Sukolik</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:Arial;background:#f2f2f2;margin:0}
+.header{background:#00bcd4;color:#fff;padding:20px;text-align:center}
+.box{background:#fff;margin:15px;padding:15px;border-radius:10px}
+button{background:#000;color:#fff;padding:10px;border:none;border-radius:8px;width:100%}
+</style>
 </head>
-<body>
-  <div class="app">
-    <div class="notice">Demo sürüm • Telefonunda tarayıcıdan açabilirsin</div>
-    <div class="header">
-      <div class="topline">
-        <span>09:41</span>
-        <span>5G • 100%</span>
-      </div>
-      <div class="brand">
-        <div>
-          <p>Hoş geldin</p>
-          <h1>Sukolik</h1>
-        </div>
-        <div class="drop">💧</div>
-      </div>
-      <div class="search">Ürün, filtre veya kampanya ara...</div>
-    </div>
-
-    <div class="content">
-      <div class="card">
-        <div class="badge">Özel Teklif</div>
-        <h2>Temiz suya şimdi geç</h2>
-        <p class="muted" style="margin-top:8px; line-height:1.5;">Seçili cihazlarda ücretsiz kurulum, taksit avantajı ve aynı gün destek.</p>
-        <button class="cta" onclick="alert('Kampanya detayları yakında eklenecek.')">Kampanyayı İncele</button>
-      </div>
-
-      <div class="section-title">
-        <h3>Öne Çıkan Ürünler</h3>
-        <span>Tümünü Gör</span>
-      </div>
-
-      <div class="product">
-        <img src="https://images.unsplash.com/photo-1563453392212-326f5e854473?q=80&w=1200&auto=format&fit=crop" alt="Su arıtma cihazı">
-        <div class="product-body">
-          <div class="badge">En Çok Satan</div>
-          <div class="row">
-            <h4>Premium Su Arıtma Cihazı</h4>
-            <div class="price">₺12.999</div>
-          </div>
-          <button class="cta" onclick="showDetail('Premium Su Arıtma Cihazı')">İncele</button>
-        </div>
-      </div>
-
-      <div class="product">
-        <img src="https://images.unsplash.com/photo-1559839914-17aae19cec71?q=80&w=1200&auto=format&fit=crop" alt="Kompakt sistem">
-        <div class="product-body">
-          <div class="badge">Yeni</div>
-          <div class="row">
-            <h4>Kompakt Mutfak Altı Sistem</h4>
-            <div class="price">₺8.499</div>
-          </div>
-          <button class="cta" onclick="showDetail('Kompakt Mutfak Altı Sistem')">İncele</button>
-        </div>
-      </div>
-
-      <div class="section-title">
-        <h3>Neden Sukolik?</h3>
-      </div>
-      <div class="chips">
-        <div class="chip">Ücretsiz kurulum</div>
-        <div class="chip">Aynı gün destek</div>
-        <div class="chip">Güvenli ödeme</div>
-        <div class="chip">Filtre değişim hatırlatma</div>
-      </div>
-
-      <div class="section-title" style="margin-top:20px;">
-        <h3>Hızlı İşlemler</h3>
-      </div>
-      <button class="cta" onclick="alert('Servis talep formu sonraki sürümde eklenecek.')">Servis Talebi Oluştur</button>
-      <button class="cta" style="margin-top:10px; background:#0891b2;" onclick="alert('Filtre değişim talebi sonraki sürümde eklenecek.')">Filtre Değişim Talebi</button>
-    </div>
-
-    <div class="bottom">
-      <div class="nav active"><strong>🏠</strong>Ana Sayfa</div>
-      <div class="nav"><strong>🛒</strong>Mağaza</div>
-      <div class="nav"><strong>🔔</strong>Bildirim</div>
-      <div class="nav"><strong>👤</strong>Profil</div>
-    </div>
-  </div>
-
-  <script>
-    function showDetail(name) {
-      alert(name + ' ürün detay ekranı sonraki versiyonda eklenecek.');
-    }
-  </script>
-</body>
+<body><div class="header">
+<h2>Sukolik</h2>
+<p>Temiz suya hemen ulaş</p>
+</div><div class="box">
+<h3>Premium Arıtma Cihazı</h3>
+<p>₺12.999</p>
+<button onclick="order()">Sipariş Ver</button>
+</div><div class="box">
+<h3>Filtre Değişimi</h3>
+<p>₺1.999</p>
+<button onclick="order()">Sipariş Ver</button>
+</div><script>
+function order(){
+window.open("https://wa.me/905442346384?text=Sipariş vermek istiyorum");
+}
+</script></body>
 </html>
