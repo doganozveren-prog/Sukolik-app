@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sukolik</title>
+  <meta name="theme-color" content="#0ea5e9" />
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: #eef4f7;
+      color: #17212b;
+    }
+    .app {
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+    .screen {
+      display: none;
+      min-height: 100vh;
+      padding-bottom: 92px;
+    }
+    .screen.active { display: block; }
+
+    .header {
+      background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+      color: #fff;
+      padding: 18px 18px 22px;
+    }
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      opacity: .95;
+      margin-bottom: 18px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .brand h1 {
+      margin: 4px 0 0;
+      font-size: 28px;
+    }
+    .brand p {
+      margin: 0;
+      font-size: 13px;
+      opacity: .92;
+    }
+    .drop {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.18);
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+    }
+
+    .content { padding: 16px; }
+
+    .input, .textarea, .select, .search {
+      width: 100%;
+      border: 1px solid #dbe4ee;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-size: 15px;
+      outline: none;
+      background: #fff;
+    }
+    .search {
+      border: 0;
+      margin-top: 12px;
+    }
+    .textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    .card, .soft-card, .product, .summary, .history-card, .detail-box {
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+    }
+    .card {
+      padding: 16px;
+      background: linear-gradient(135deg, #eff9ff, #f0fdfa);
+      border-color: #d9f1fb;
+    }
+    .soft-card, .summary, .history-card, .detail-box {
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #0369a1;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .status {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #f1f5f9;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+    .muted { color: #5b6875; }
+    .hero-title {
+      margin: 8px 0;
+      font-size: 28px;
+      line-height: 1.08;
+    }
+
+    .pill-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .pill {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 18px 14px;
+      font-weight: 700;
+      color: #22313f;
+      cursor: pointer;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .row-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 14px;
+    }
+    .price {
+      font-weight: 800;
+      white-space: nowrap;
+      font-size: 22px;
+    }
+
+    .btn {
+      width: 100%;
+      border: 0;
+      border-radius: 16px;
+      padding: 14px 16px;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    .btn.primary { background: #091736; color: #fff; }
+    .btn.secondary { background: #0f9dc1; color: #fff; }
+    .btn.light { background: #e0f2fe; color: #075985; }
+    .btn.success { background: #16a34a; color: #fff; }
+    .btn.small {
+      width: auto;
+      padding: 10px 12px;
+      margin-top: 0;
+      font-size: 13px;
+    }
+
+    .bottom {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      width: 100%;
+      max-width: 430px;
+      background: #fff;
+      border-top: 1px solid #e2e8f0;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 10px 8px 12px;
+    }
+    .nav {
+      text-align: center;
+      color: #64748b;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .nav strong {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 4px;
+    }
+    .nav.active {
+      color: #0284c7;
+      font-weight: 700;
+    }
+
+    .product-list {
+      display: grid;
+      gap: 14px;
+    }
+    .product img, .detail-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+      border-radius: 20px 20px 0 0;
+      background: #e5e7eb;
+    }
+    .product-body { padding: 14px; }
+
+    .cart-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #edf2f7;
+      gap: 8px;
+    }
+    .cart-line:last-child { border-bottom: 0; }
+
+    .empty {
+      border: 1px dashed #cbd5e1;
+      border-radius: 18px;
+      padding: 18px;
+      text-align: center;
+      color: #64748b;
+      background: #fff;
+    }
+
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: linear-gradient(180deg, #e0f7ff, #fff);
+    }
+    .login-card {
+      width: 100%;
+      background: #fff;
+      border-radius: 24px;
+      padding: 24px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .qty-btn {
+      width: 32px;
+      height: 32px;
+      border: 0;
+      border-radius: 10px;
+      background: #e2e8f0;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .list-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .payment-box label {
+      display: block;
+      padding: 12px 14px;
+      border: 1px solid #dbe4ee;
+      border-radius: 14px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    .payment-box input { margin-right: 8px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="screen active" id="loginScreen">
+      <div class="login-wrap">
+        <div class="login-card">
+          <div style="text-align:center">
+            <div style="font-size:52px">💧</div>
+            <h1 style="margin:10px 0 6px">Sukolik</h1>
+            <p class="muted">Su arıtma cihazı, filtre ve servis işlemlerini tek uygulamada yönetin.</p>
+          </div>
+          <input class="input" id="loginName" placeholder="Ad Soyad" value="Müşteri" />
+          <input class="input" id="loginPhone" placeholder="Telefon" />
+          <input class="input" id="loginAddress" placeholder="Adres" />
+          <button class="btn primary" id="loginBtn">Uygulamaya Gir</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen" id="homeScreen">
+      <div class="header">
+        <div class="topline"><span>09:41</span><span>5G • 100%</span></div>
+        <div class="brand">
+          <div><p>Hoş geldin</p><h1 id="welcomeName">Sukolik</h1></div>
+          <div class="drop">💧</div>
+        </div>
+        <input class="search" id="homeSearch" placeholder="Ürün, filtre veya kampanya ara..." />
+      </div>
+      <div class="content">
+        <div class="card">
+          <div class="badge">Özel Kampanya</div>
+          <h2 class="hero-title">Premium arıtma cihazlarında ücretsiz kurulum</h2>
+          <p class="muted">Cihazları incele, karşılaştır, sepete ekle ve siparişini kolayca tamamla.</p>
+          <button class="btn primary" id="campaignBtn">Kampanyayı İncele</button>
+        </div>
+
+        <div class="soft-card">
+          <div class="row">
+            <h2 style="margin:0">Hızlı İşlemler</h2>
+            <button class="btn light small" data-screen="catalogScreen">Mağazaya Git</button>
+          </div>
+          <div class="pill-grid" style="margin-top:12px">
+            <div class="pill" data-screen="serviceScreen">Servis Talebi</div>
+            <div class="pill" data-screen="catalogScreen">Filtre Değişimi</div>
+            <div class="pill" data-screen="cartScreen">Sepetim</div>
+            <div class="pill" data-screen="profileScreen">Profilim</div>
+          </div>
+        </div>
+
+        <div class="soft-card">
+          <div class="row">
+            <h2 style="margin:0">Öne Çıkan Ürünler</h2>
+            <button class="btn light small" data-screen="catalogScreen">Tümünü Gör</button>
+          </div>
+        </div>
+
+        <div class="product-list" id="featuredProducts"></div>
+      </div>
+    </div>
+
+    <div class="screen" id="catalogScreen">
+      <div class="header">
+        <div class="topline"><span>09:41</span><span>Mağaza</span></div>
+        <div class="brand"><div><p>Ürünler</p><h1>Mağaza</h1></div><div class="drop">🛒</div></div>
+      </div>
+      <div class="content">
+        <input class="input" id="catalogSearch" placeholder="Ürün ara..." />
+        <select id="categoryFilter" class="select" style="margin-top:12px">
+          <option value="Tümü">Tüm Kategoriler</option>
+          <option value="Cihaz">Cihaz</option>
+          <option value="Filtre">Filtre</option>
+          <option value="Aksesuar">Aksesuar</option>
+        </select>
+        <div class="product-list" id="catalogProducts" style="margin-top:14px"></div>
+      </div>
+    </div>
+
+    <div class="screen" id="detailScreen">
+      <div class="header">
+        <div class="topline"><span>09:41</span><span>Ürün Detayı</span></div>
+        <div class="brand"><div><p>İnceleme</p><h1>Ürün</h1></div><div class="drop">📦</div></div>
+      </div>
+      <div class="content" id="detailContent"></div>
+  </div>
+  <div class="screen" id="campaignScreen">
+      <div class="header">
+        <div class="topline"><span>09:41</span><span>Kampanya</span></div>
+        <div class="brand"><div><p>Fırsat</p><h1>Kampanya</h1></div><div class="drop">🔥</div></div>
+      </div>
+      <div class="content">
+        <div class="detail-box">
+          <img class="detail-image" loading="lazy" src="https://images.unsplash.com/photo-1559839914-17aae19cec71?auto=format&fit=crop&w=700&q=60" alt="kampanya" />
+          <div class="badge" style="margin-top:14px">Sınırlı Süre</div>
+          <h2 style="margin:6px 0">Premium cihaz + ücretsiz kurulum + ilk filtre desteği</h2>
+          <p class="muted">Kampanya süresince premium cihazlarda ücretsiz kurulum, taksit avantajı ve ilk bakım desteği sunulur.</p>
+          <button class="btn primary" data-open-product="1">Kampanyalı Ürünü İncele</button>
+          <button class="btn light" data-screen="catalogScreen">Diğer Ürünleri Gör</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen" id="cartScreen">
+      <div class="header">
+        <div class="topline"><span>09:41</span><span>Sepet</span></div>
+        <div class="brand"><div><p>Aktif Sipariş</p><h1>Sepetim</h1></div><div class="drop">🧺</div></div>
+      </div>
+      <div class="content">
+        <div id="cartItems"></div>
+        <div class="summary">
+          <div class="row"><span>Toplam</span><strong id="cartTotal">₺0</strong></div>
+        </div>
+        <button class="btn primary" id="checkoutBtn">Siparişi Tamamla</button>
+      </div>
+    </div>
+
+    <div class="screen" id="checkoutScreen">
+      <div class="header">
+        <div class="topline"><span>09:41</span><span>Ödeme</span></div>
+        <div class="brand"><div><p>Bilgiler</p><h1>Sipariş Formu</h1></div><div class="drop">💳</div></div>
+      </div>
+      <div class="content">
+        <div class="soft-card">
+          <div class="badge">Teslimat Bilgileri</div>
+          <input class="input" id="checkoutName" placeholder="Ad Soyad" />
+          <input class="input" id="checkoutPhone" placeholder="Telefon" style="margin-top:12px" />
+          <textarea class="textarea" id="checkoutAddress" placeholder="Adres" style="margin-top:12px"></textarea>
+
+          <div class="payment-box" style="margin-top:12px">
+            <label><input type="radio" name="paymentMethod" value="Kapıda ödeme" checked>Kapıda ödeme</label>
+            <label><input type="radio" name="paymentMethod" value="Havale / EFT">Havale / EFT</label>
+            <label><input type="radio" name="paymentMethod" value="Kredi kartı">Kredi kartı</label>
+          </div>
+
+          <button class="btn success" id="sendOrderBtn">Siparişi Gönder</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen" id="serviceScreen">
+      <div class="header">
+        <div class="topline"><span>09:41</span><span>Servis</span></div>
+        <div class="brand"><div><p>Destek</p><h1>Servis Talebi</h1></div><div class="drop">🔧</div></div>
+      </div>
+      <div class="content">
+        <div class="soft-card">
+          <div class="badge">Hızlı Servis</div>
+          <input class="input" id="serviceName" placeholder="Ad Soyad" />
+          <input class="input" id="servicePhone" placeholder="Telefon" style="margin-top:12px" />
+          <select id="serviceType" class="select" style="margin-top:12px">
+            <option>Filtre değişimi</option>
+            <option>Arıza kaydı</option>
+            <option>Kurulum talebi</option>
+            <option>Bakım talebi</option>
+          </select>
+          <textarea class="textarea" id="serviceNote" placeholder="Talebinizi yazın" style="margin-top:12px"></textarea>
+          <button class="btn secondary" id="serviceSubmitBtn">Servis Talebi Gönder</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="screen" id="profileScreen">
+      <div class="header">
+        <div class="topline"><span>09:41</span><span>Profil</span></div>
+        <div class="brand"><div><p>Hesabım</p><h1 id="profileName">Müşteri</h1></div><div class="drop">👤</div></div>
+      </div>
+      <div class="content">
+        <div class="history-card">
+          <div class="badge">Bilgilerim</div>
+          <p id="profilePhone" class="muted">Telefon: -</p>
+          <p id="profileAddress" class="muted">Adres: -</p>
+        </div>
+        <div class="history-card">
+          <div class="row"><h3 style="margin:0">Sipariş Geçmişi</h3></div>
+          <div id="orderHistory"></div>
+        </div>
+        <div class="history-card">
+          <div class="row"><h3 style="margin:0">Servis Geçmişi</h3></div>
+          <div id="serviceHistory"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom" id="bottomNav" style="display:none">
+    <div class="nav active" data-screen="homeScreen"><strong>🏠</strong>Ana Sayfa</div>
+    <div class="nav" data-screen="catalogScreen"><strong>🛒</strong>Mağaza</div>
+    <div class="nav" data-screen="serviceScreen"><strong>🔧</strong>Servis</div>
+    <div class="nav" data-screen="profileScreen"><strong>👤</strong>Profil</div>
+  </div>
+  <script>
+    const PHONE_NUMBER = '905442346384';
+    const STORE_KEYS = {
+      cart: 'sukolik_fast_cart',
+      profile: 'sukolik_fast_profile',
+      orders: 'sukolik_fast_orders',
+      services: 'sukolik_fast_services'
+    };
+
+    const PRODUCTS = [
+      {
+        id: 1,
+        name: 'Premium Su Arıtma Cihazı',
+        category: 'Cihaz',
+        price: 12999,
+        badge: 'En Çok Satan',
+        feature: '7 aşamalı filtreleme, mineral dengeleme ve hızlı akış',
+        image: 'https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&w=700&q=60',
+        details: ['7 aşamalı filtre sistemi', 'Ücretsiz kurulum', '2 yıl servis desteği']
+      },
+      {
+        id: 2,
+        name: 'Kompakt Mutfak Altı Sistem',
+        category: 'Cihaz',
+        price: 8999,
+        badge: 'Kampanya',
+        feature: 'Dar alanlar için kompakt tasarım',
+        image: 'https://images.unsplash.com/photo-1559839914-17aae19cec71?auto=format&fit=crop&w=700&q=60',
+        details: ['Kompakt gövde', 'Düşük enerji tüketimi', 'Sessiz çalışma']
+      },
+      {
+        id: 3,
+        name: 'Yıllık Filtre Seti',
+        category: 'Filtre',
+        price: 1999,
+        badge: 'Filtre Paketi',
+        feature: '12 aylık kullanım için komple set',
+        image: 'https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&w=700&q=60',
+        details: ['Sediment filtre', 'Karbon filtre', 'Membran uyumlu']
+      },
+      {
+        id: 4,
+        name: 'Alkali Filtre Kartuşu',
+        category: 'Filtre',
+        price: 799,
+        badge: 'Yeni',
+        feature: 'Mineral ve pH dengesi desteği',
+        image: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=700&q=60',
+        details: ['Hızlı değişim', 'Uyumlu bağlantı', 'Sağlıklı mineral desteği']
+      },
+      {
+        id: 5,
+        name: 'Musluk Seti',
+        category: 'Aksesuar',
+        price: 649,
+        badge: 'Aksesuar',
+        feature: 'Şık ve dayanıklı musluk seti',
+        image: 'https://images.unsplash.com/photo-1502741338009-cac2772e18bc?auto=format&fit=crop&w=700&q=60',
+        details: ['Paslanmaz yüzey', 'Kolay kurulum', 'Şık görünüm']
+      }
+    ];
+
+    const getData = (k, f) => {
+      try { return JSON.parse(localStorage.getItem(k)) ?? f; }
+      catch { return f; }
+    };
+    const setData = (k, v) => localStorage.setItem(k, JSON.stringify(v));
+
+    const getCart = () => getData(STORE_KEYS.cart, []);
+    const setCart = v => setData(STORE_KEYS.cart, v);
+    const getProfile = () => getData(STORE_KEYS.profile, {});
+    const setProfile = v => setData(STORE_KEYS.profile, v);
+    const getOrders = () => getData(STORE_KEYS.orders, []);
+    const setOrders = v => setData(STORE_KEYS.orders, v);
+    const getServices = () => getData(STORE_KEYS.services, []);
+    const setServices = v => setData(STORE_KEYS.services, v);
+
+    const formatPrice = v => '₺' + Number(v || 0).toLocaleString('tr-TR');
+
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(id);
+      if (target) target.classList.add('active');
+
+      document.querySelectorAll('.nav').forEach(n => n.classList.remove('active'));
+      const activeNav = document.querySelector(`.nav[data-screen="${id}"]`);
+      if (activeNav) activeNav.classList.add('active');
+
+      if (id === 'homeScreen') renderFeatured();
+      if (id === 'catalogScreen') renderCatalog();
+      if (id === 'cartScreen') renderCart();
+      if (id === 'profileScreen') renderProfile();
+    }
+
+    function hydrateProfile() {
+      const p = getProfile();
+      document.getElementById('welcomeName').textContent = p.name || 'Sukolik';
+      document.getElementById('profileName').textContent = p.name || 'Müşteri';
+      document.getElementById('profilePhone').textContent = 'Telefon: ' + (p.phone || '-');
+      document.getElementById('profileAddress').textContent = 'Adres: ' + (p.address || '-');
+      document.getElementById('serviceName').value = p.name || '';
+      document.getElementById('servicePhone').value = p.phone || '';
+      document.getElementById('checkoutName').value = p.name || '';
+      document.getElementById('checkoutPhone').value = p.phone || '';
+      document.getElementById('checkoutAddress').value = p.address || '';
+    }
+
+    function login() {
+      setProfile({
+        name: document.getElementById('loginName').value || 'Müşteri',
+        phone: document.getElementById('loginPhone').value || '',
+        address: document.getElementById('loginAddress').value || ''
+      });
+      hydrateProfile();
+      document.getElementById('bottomNav').style.display = 'grid';
+      showScreen('homeScreen');
+    }
+
+    function productCard(p) {
+      return `<div class="product">
+        <img loading="lazy" src="${p.image}" alt="${p.name}">
+        <div class="product-body">
+          <div class="badge">${p.badge}</div>
+          <div class="row-top">
+            <div>
+              <h3 style="margin:0 0 6px">${p.name}</h3>
+              <p class="muted" style="margin:0">${p.feature}</p>
+            </div>
+            <div class="price">${formatPrice(p.price)}</div>
+          </div>
+          <div class="list-actions">
+            <button class="btn light small" data-open-product="${p.id}">İncele</button>
+            <button class="btn primary small" data-add-product="${p.id}">Sepete Ekle</button>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    function renderFeatured() {
+      const q = (document.getElementById('homeSearch').value || '').toLowerCase();
+      const items = PRODUCTS.filter(p =>
+        !q ||
+        p.name.toLowerCase().includes(q) ||
+        p.feature.toLowerCase().includes(q)
+      ).slice(0, 3);
+      document.getElementById('featuredProducts').innerHTML =
+        items.length ? items.map(productCard).join('') : '<div class="empty">Ürün bulunamadı.</div>';
+    }
+
+    function renderCatalog() {
+      const q = (document.getElementById('catalogSearch').value || '').toLowerCase();
+      const c = document.getElementById('categoryFilter').value;
+      const items = PRODUCTS.filter(p =>
+        (c === 'Tümü' || p.category === c) &&
+        (!q || p.name.toLowerCase().includes(q) || p.feature.toLowerCase().includes(q))
+      );
+      document.getElementById('catalogProducts').innerHTML =
+        items.length ? items.map(productCard).join('') : '<div class="empty">Ürün bulunamadı.</div>';
+    }
+
+    function openProduct(id) {
+      const p = PRODUCTS.find(x => x.id === id);
+      if (!p) return;
+
+      document.getElementById('detailContent').innerHTML = `<div class="detail-box">
+        <img class="detail-image" loading="lazy" src="${p.image}" alt="${p.name}">
+        <div class="badge" style="margin-top:14px">${p.badge}</div>
+        <div class="row-top">
+          <div>
+            <h2 style="margin:0 0 8px">${p.name}</h2>
+            <p class="muted" style="margin:0">${p.feature}</p>
+          </div>
+          <div class="price">${formatPrice(p.price)}</div>
+        </div>
+        <div style="margin-top:14px">
+          ${p.details.map(d => `<div class="cart-line"><span>${d}</span></div>`).join('')}
+        </div>
+        <button class="btn primary" data-add-product="${p.id}">Sepete Ekle</button>
+        <button class="btn light" data-screen="catalogScreen">Mağazaya Dön</button>
+      </div>`;
+      showScreen('detailScreen');
+    }
+
+    function addToCart(id) {
+      const p = PRODUCTS.find(x => x.id === id);
+      if (!p) return;
+
+      const cart = getCart();
+      const found = cart.find(x => x.id === id);
+
+      if (found) found.qty += 1;
+      else cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
+
+      setCart(cart);
+      renderCart();
+      showScreen('cartScreen');
+    }
+
+    function updateQty(id, delta) {
+      const cart = getCart()
+        .map(i => i.id === id ? ({ ...i, qty: i.qty + delta }) : i)
+        .filter(i => i.qty > 0);
+
+      setCart(cart);
+      renderCart();
+    }
+
+    function renderCart() {
+      const cart = getCart();
+      const area = document.getElementById('cartItems');
+
+      if (!cart.length) {
+        area.innerHTML = '<div class="empty">Sepetinde ürün yok.</div>';
+        document.getElementById('cartTotal').textContent = formatPrice(0);
+        return;
+      }
+
+      area.innerHTML = cart.map(i => `<div class="history-card">
+        <div class="row-top">
+          <div>
+            <strong>${i.name}</strong>
+            <p class="muted" style="margin:6px 0 0">${formatPrice(i.price)} / adet</p>
+          </div>
+          <div class="qty-controls">
+            <button class="qty-btn" data-qty-change="${i.id}" data-qty-delta="-1">−</button>
+            <strong>${i.qty}</strong>
+            <button class="qty-btn" data-qty-change="${i.id}" data-qty-delta="1">+</button>
+          </div>
+        </div>
+        <div class="cart-line"><span>Ara toplam</span><strong>${formatPrice(i.price * i.qty)}</strong></div>
+      </div>`).join('');
+
+      document.getElementById('cartTotal').textContent =
+        formatPrice(cart.reduce((s, i) => s + i.price * i.qty, 0));
+    }
+
+    function selectedPaymentMethod() {
+      const el = document.querySelector('input[name="paymentMethod"]:checked');
+      return el ? el.value : 'Kapıda ödeme';
+    }
+
+    function sendOrder() {
+      const cart = getCart();
+      if (!cart.length) {
+        alert('Önce sepete ürün ekleyin.');
+        return;
+      }
+
+      const name = document.getElementById('checkoutName').value || 'Müşteri';
+      const phone = document.getElementById('checkoutPhone').value || '-';
+      const address = document.getElementById('checkoutAddress').value || '-';
+      const payment = selectedPaymentMethod();
+
+      setProfile({ name, phone, address });
+      hydrateProfile();
+
+      const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      const lines = cart.map(i => `${i.name} x${i.qty} = ${formatPrice(i.price * i.qty)}`).join('\n');
+
+      const orders = getOrders();
+      orders.unshift({
+        id: Date.now(),
+        name,
+        phone,
+        address,
+        payment,
+        total,
+        createdAt: new Date().toLocaleString('tr-TR'),
+        status: 'Sipariş Alındı'
+      });
+      setOrders(orders);
+
+      setCart([]);
+      renderCart();
+
+      const message = [
+        'Merhaba, Sukolik uygulamasından sipariş vermek istiyorum.',
+        '',
+        'Ad Soyad: ' + name,
+        'Telefon: ' + phone,
+        'Adres: ' + address,
+        'Ödeme: ' + payment,
+        '',
+        'Ürünler:',
+        lines,
+        '',
+        'Toplam: ' + formatPrice(total)
+      ].join('\n');
+
+      window.open('https://wa.me/' + PHONE_NUMBER + '?text=' + encodeURIComponent(message), '_blank');
+      showScreen('profileScreen');
+    }
+
+    function submitService() {
+      const name = document.getElementById('serviceName').value || 'Müşteri';
+      const phone = document.getElementById('servicePhone').value || '-';
+      const type = document.getElementById('serviceType').value;
+      const note = document.getElementById('serviceNote').value || '-';
+
+      const services = getServices();
+      services.unshift({
+        id: Date.now(),
+        name,
+        phone,
+        type,
+        note,
+        createdAt: new Date().toLocaleString('tr-TR'),
+        status: 'Talep Alındı'
+      });
+      setServices(services);
+
+      const msg = [
+        'Merhaba, servis talebi oluşturmak istiyorum.',
+        '',
+        'Ad Soyad: ' + name,
+        'Telefon: ' + phone,
+        'Talep Türü: ' + type,
+        'Not: ' + note
+      ].join('\n');
+
+      window.open('https://wa.me/' + PHONE_NUMBER + '?text=' + encodeURIComponent(msg), '_blank');
+      document.getElementById('serviceNote').value = '';
+      renderProfile();
+      showScreen('profileScreen');
+    }
+
+    function renderProfile() {
+      hydrateProfile();
+
+      const orders = getOrders();
+      const services = getServices();
+
+      document.getElementById('orderHistory').innerHTML =
+        orders.length
+          ? orders.map(o => `<div class="history-card">
+              <div class="badge">Sipariş</div>
+              <div class="row"><strong>${formatPrice(o.total)}</strong><span class="status">${o.status}</span></div>
+              <p class="muted" style="margin:10px 0 0">${o.createdAt}</p>
+              <p class="muted" style="margin:6px 0 0">Ödeme: ${o.payment}</p>
+            </div>`).join('')
+          : '<div class="empty">Henüz sipariş geçmişi yok.</div>';
+
+      document.getElementById('serviceHistory').innerHTML =
+        services.length
+          ? services.map(s => `<div class="history-card">
+              <div class="badge">${s.type}</div>
+              <p style="margin:0">${s.note}</p>
+              <p class="muted" style="margin:10px 0 0">${s.createdAt}</p>
+              <span class="status">${s.status}</span>
+            </div>`).join('')
+          : '<div class="empty">Henüz servis geçmişi yok.</div>';
+    }
+
+    document.getElementById('loginBtn').addEventListener('click', login);
+    document.getElementById('homeSearch').addEventListener('input', renderFeatured);
+    document.getElementById('catalogSearch').addEventListener('input', renderCatalog);
+    document.getElementById('categoryFilter').addEventListener('change', renderCatalog);
+    document.getElementById('campaignBtn').addEventListener('click', () => showScreen('campaignScreen'));
+
+    document.getElementById('checkoutBtn').addEventListener('click', () => {
+      if (!getCart().length) {
+        alert('Sepetin boş.');
+        return;
+      }
+      showScreen('checkoutScreen');
+    });
+
+    document.getElementById('sendOrderBtn').addEventListener('click', sendOrder);
+    document.getElementById('serviceSubmitBtn').addEventListener('click', submitService);
+
+    document.addEventListener('click', function(e) {
+      const nav = e.target.closest('[data-screen]');
+      if (nav) {
+        showScreen(nav.getAttribute('data-screen'));
+        return;
+      }
+
+      const add = e.target.closest('[data-add-product]');
+      if (add) {
+        addToCart(Number(add.getAttribute('data-add-product')));
+        return;
+      }
+
+      const open = e.target.closest('[data-open-product]');
+      if (open) {
+        openProduct(Number(open.getAttribute('data-open-product')));
+        return;
+      }
+
+      const qty = e.target.closest('[data-qty-change]');
+      if (qty) {
+        updateQty(
+          Number(qty.getAttribute('data-qty-change')),
+          Number(qty.getAttribute('data-qty-delta'))
+        );
+        return;
+      }
+    });
+
+    if (getProfile().name || getProfile().phone) {
+      document.getElementById('bottomNav').style.display = 'grid';
+      hydrateProfile();
+      showScreen('homeScreen');
+    } else {
+      renderFeatured();
+      renderCatalog();
+    }
+  </script>
+</body>
+</html>
