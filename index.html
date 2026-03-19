@@ -564,142 +564,594 @@
     <div class="nav" data-screen="profileScreen"><strong>👤</strong>Profil</div>
   </div>
   <script>
-const PHONE_NUMBER = '905442346384';
-const ADMIN_USER = 'admin';
-const ADMIN_PASS = '1234';
+    const PHONE_NUMBER = '905442346384';
+    const ADMIN_USER = 'admin';
+    const ADMIN_PASS = '1234';
 
-const STORE_KEYS = {
-  cart: 'cart_v1',
-  profile: 'profile_v1',
-  orders: 'orders_v1',
-  services: 'services_v1',
-  products: 'products_v1'
-};
+    const STORE_KEYS = {
+      cart: 'sukolik_admin_cart_v1',
+      profile: 'sukolik_admin_profile_v1',
+      orders: 'sukolik_admin_orders_v1',
+      services: 'sukolik_admin_services_v1',
+      products: 'sukolik_admin_products_v1'
+    };
 
-const DEFAULT_PRODUCTS = [
-  {
-    id: 1,
-    name: 'Premium Su Arıtma Cihazı',
-    category: 'Cihaz',
-    price: 12999,
-    badge: 'En Çok Satan',
-    feature: '7 aşamalı filtreleme',
-    image: 'https://images.unsplash.com/photo-1563453392212-326f5e854473',
-    details: ['7 aşama', 'Ücretsiz kurulum']
-  }
-];
+    const DEFAULT_PRODUCTS = [
+      {
+        id: 1,
+        name: 'Premium Su Arıtma Cihazı',
+        category: 'Cihaz',
+        price: 12999,
+        badge: 'En Çok Satan',
+        feature: '7 aşamalı filtreleme, mineral dengeleme ve hızlı akış',
+        image: 'https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&w=700&q=60',
+        details: ['7 aşamalı filtre sistemi', 'Ücretsiz kurulum', '2 yıl servis desteği']
+      },
+      {
+        id: 2,
+        name: 'Kompakt Mutfak Altı Sistem',
+        category: 'Cihaz',
+        price: 8999,
+        badge: 'Kampanya',
+        feature: 'Dar alanlar için kompakt tasarım',
+        image: 'https://images.unsplash.com/photo-1559839914-17aae19cec71?auto=format&fit=crop&w=700&q=60',
+        details: ['Kompakt gövde', 'Düşük enerji tüketimi', 'Sessiz çalışma']
+      },
+      {
+        id: 3,
+        name: 'Yıllık Filtre Seti',
+        category: 'Filtre',
+        price: 1999,
+        badge: 'Filtre Paketi',
+        feature: '12 aylık kullanım için komple set',
+        image: 'https://images.unsplash.com/photo-1523362628745-0c100150b504?auto=format&fit=crop&w=700&q=60',
+        details: ['Sediment filtre', 'Karbon filtre', 'Membran uyumlu']
+      }
+    ];
 
-function getData(key, fallback) {
-  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
-  catch { return fallback; }
-}
+    let editingProductId = null;
+    function getData(key, fallback) {
+      try { return JSON.parse(localStorage.getItem(key)) ?? fallback; }
+      catch { return fallback; }
+    }
 
-function setData(key, value) {
-  localStorage.setItem(key, JSON.stringify(value));
-}
+    function setData(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
 
-function getProducts() {
-  let p = getData(STORE_KEYS.products, null);
-  if (!p || !p.length) {
-    setData(STORE_KEYS.products, DEFAULT_PRODUCTS);
-    return DEFAULT_PRODUCTS;
-  }
-  return p;
-}
+    function getProducts() {
+      const items = getData(STORE_KEYS.products, null);
+      if (!items || !Array.isArray(items) || !items.length) {
+        setData(STORE_KEYS.products, DEFAULT_PRODUCTS);
+        return DEFAULT_PRODUCTS;
+      }
+      return items;
+    }
 
-function setProducts(v){ setData(STORE_KEYS.products,v); }
+    function setProducts(v) { setData(STORE_KEYS.products, v); }
+    function getCart() { return getData(STORE_KEYS.cart, []); }
+    function setCart(v) { setData(STORE_KEYS.cart, v); }
+    function getProfile() { return getData(STORE_KEYS.profile, {}); }
+    function setProfile(v) { setData(STORE_KEYS.profile, v); }
+    function getOrders() { return getData(STORE_KEYS.orders, []); }
+    function setOrders(v) { setData(STORE_KEYS.orders, v); }
+    function getServices() { return getData(STORE_KEYS.services, []); }
+    function setServices(v) { setData(STORE_KEYS.services, v); }
 
-function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  const el = document.getElementById(id);
-  if(el) el.classList.add('active');
-}
+    function formatPrice(v) {
+      return '₺' + Number(v || 0).toLocaleString('tr-TR');
+    }
 
-function adminLogin(){
-  const u = document.getElementById('adminUser').value;
-  const p = document.getElementById('adminPass').value;
-  if(u===ADMIN_USER && p===ADMIN_PASS){
-    showScreen('adminPanelScreen');
-  } else alert('Hatalı giriş');
-}
-    function saveProduct(){
-  const name = document.getElementById('adminProductName').value.trim();
-  const category = document.getElementById('adminProductCategory').value;
-  const price = Number(document.getElementById('adminProductPrice').value || 0);
-  const badge = document.getElementById('adminProductBadge').value.trim() || 'Yeni';
-  const image = document.getElementById('adminProductImage').value.trim() || 'https://images.unsplash.com/photo-1563453392212-326f5e854473';
-  const feature = document.getElementById('adminProductFeature').value.trim() || 'Kısa açıklama';
-  const details = document.getElementById('adminProductDetails').value
-    .split('\n').map(x=>x.trim()).filter(Boolean);
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(id);
+      if (target) target.classList.add('active');
 
-  if(!name || !price){
-    alert('Ürün adı ve fiyat gerekli');
-    return;
-  }
+      const bottomNav = document.getElementById('bottomNav');
+      if (id === 'adminPanelScreen' || id === 'roleScreen' || id === 'loginScreen' || id === 'adminLoginScreen') {
+        bottomNav.style.display = 'none';
+      } else if (id !== 'roleScreen' && id !== 'adminLoginScreen') {
+        const profile = getProfile();
+        if (profile.name || profile.phone) bottomNav.style.display = 'grid';
+      }
 
-  const products = getProducts();
-  products.unshift({
-    id: Date.now(),
-    name,
-    category,
-    price,
-    badge,
-    image,
-    feature,
-    details: details.length ? details : ['Detay bilgisi']
-  });
+      document.querySelectorAll('.nav').forEach(n => n.classList.remove('active'));
+      const activeNav = document.querySelector(`.nav[data-screen="${id}"]`);
+      if (activeNav) activeNav.classList.add('active');
+      if (id === 'homeScreen') renderFeatured();
+      if (id === 'catalogScreen') renderCatalog();
+      if (id === 'cartScreen') renderCart();
+      if (id === 'profileScreen') renderProfile();
+      if (id === 'adminPanelScreen') renderAdminPanel();
+    }
 
-  setProducts(products);
-  renderAdminProducts();
-  renderCatalog();
-  alert('Ürün kaydedildi');
-}
+    function hydrateProfile() {
+      const p = getProfile();
+      const welcomeName = document.getElementById('welcomeName');
+      if (welcomeName) welcomeName.textContent = p.name || 'Sukolik';
+      document.getElementById('profileName').textContent = p.name || 'Müşteri';
+      document.getElementById('profilePhone').textContent = 'Telefon: ' + (p.phone || '-');
+      document.getElementById('profileAddress').textContent = 'Adres: ' + (p.address || '-');
+      document.getElementById('serviceName').value = p.name || '';
+      document.getElementById('servicePhone').value = p.phone || '';
+      document.getElementById('checkoutName').value = p.name || '';
+      document.getElementById('checkoutPhone').value = p.phone || '';
+      document.getElementById('checkoutAddress').value = p.address || '';
+    }
 
-function renderAdminProducts(){
-  const products = getProducts();
-  const area = document.getElementById('adminProductList');
-  if(!area) return;
+    function customerLogin() {
+      const profile = {
+        name: document.getElementById('loginName').value || 'Müşteri',
+        phone: document.getElementById('loginPhone').value || '',
+        address: document.getElementById('loginAddress').value || ''
+      };
+      setProfile(profile);
+      hydrateProfile();
+      document.getElementById('bottomNav').style.display = 'grid';
+      showScreen('homeScreen');
+    }
 
-  area.innerHTML = products.map(p => `
-    <div class="history-card">
-      <strong>${p.name}</strong>
-      <p class="muted" style="margin:8px 0 0">${p.category} • ₺${p.price}</p>
-      <p class="muted" style="margin:8px 0 0">${p.feature}</p>
-    </div>
-  `).join('');
-}
+    function adminLogin() {
+      const user = document.getElementById('adminUser').value.trim();
+      const pass = document.getElementById('adminPass').value.trim();
 
-function renderCatalog(){
-  const products = getProducts();
-  const area = document.getElementById('catalogProducts');
-  if(!area) return;
+      if (user === ADMIN_USER && pass === ADMIN_PASS) {
+        showScreen('adminPanelScreen');
+      } else {
+        alert('Admin bilgileri hatalı.');
+      }
+    }
 
-  area.innerHTML = products.map(p => `
-    <div class="product">
-      <img src="${p.image}" alt="${p.name}">
-      <div class="product-body">
-        <div class="badge">${p.badge}</div>
+    function adminLogout() {
+      editingProductId = null;
+      clearAdminForm();
+      showScreen('roleScreen');
+    }
+    function productCard(product) {
+      return `<div class="product">
+        <img loading="lazy" src="${product.image}" alt="${product.name}">
+        <div class="product-body">
+          <div class="badge">${product.badge}</div>
+          <div class="row-top">
+            <div>
+              <h3 style="margin:0 0 6px">${product.name}</h3>
+              <p class="muted" style="margin:0">${product.feature}</p>
+            </div>
+            <div class="price">${formatPrice(product.price)}</div>
+          </div>
+          <div class="list-actions">
+            <button class="btn light small" data-open-product="${product.id}">İncele</button>
+            <button class="btn primary small" data-add-product="${product.id}">Sepete Ekle</button>
+          </div>
+        </div>
+      </div>`;
+    }
+
+    function renderFeatured() {
+      const q = (document.getElementById('homeSearch').value || '').toLowerCase();
+      const items = getProducts()
+        .filter(p => !q || p.name.toLowerCase().includes(q) || p.feature.toLowerCase().includes(q))
+        .slice(0, 3);
+
+      document.getElementById('featuredProducts').innerHTML =
+        items.length ? items.map(productCard).join('') : '<div class="empty">Ürün bulunamadı.</div>';
+    }
+
+    function renderCatalog() {
+      const q = (document.getElementById('catalogSearch').value || '').toLowerCase();
+      const c = document.getElementById('categoryFilter').value;
+
+      const items = getProducts().filter(p =>
+        (c === 'Tümü' || p.category === c) &&
+        (!q || p.name.toLowerCase().includes(q) || p.feature.toLowerCase().includes(q))
+      );
+
+      document.getElementById('catalogProducts').innerHTML =
+        items.length ? items.map(productCard).join('') : '<div class="empty">Ürün bulunamadı.</div>';
+    }
+
+    function openProduct(id) {
+      const p = getProducts().find(x => x.id === id);
+      if (!p) return;
+
+     document.getElementById('detailContent').innerHTML = `<div class="detail-box">
+        <img class="detail-image" loading="lazy" src="${p.image}" alt="${p.name}">
+        <div class="badge" style="margin-top:14px">${p.badge}</div>
         <div class="row-top">
           <div>
-            <h3 style="margin:0 0 6px">${p.name}</h3>
+            <h2 style="margin:0 0 8px">${p.name}</h2>
             <p class="muted" style="margin:0">${p.feature}</p>
           </div>
-          <div class="price">₺${p.price}</div>
+          <div class="price">${formatPrice(p.price)}</div>
         </div>
-      </div>
-    </div>
-  `).join('');
-}
+        <div style="margin-top:14px">
+          ${p.details.map(d => `<div class="cart-line"><span>${d}</span></div>`).join('')}
+        </div>
+        <button class="btn primary" data-add-product="${p.id}">Sepete Ekle</button>
+        <button class="btn light" data-screen="catalogScreen">Mağazaya Dön</button>
+      </div>`;
 
-document.getElementById('goCustomerBtn').onclick = () => showScreen('loginScreen');
-document.getElementById('goAdminBtn').onclick = () => showScreen('adminLoginScreen');
-document.getElementById('backRoleBtn').onclick = () => showScreen('roleScreen');
-document.getElementById('adminLoginBtn').onclick = adminLogin;
-document.getElementById('saveProductBtn').onclick = saveProduct;
+      showScreen('detailScreen');
+    }
 
-showScreen('roleScreen');
-renderCatalog();
-renderAdminProducts();
-</script>
+    function addToCart(id) {
+      const p = getProducts().find(x => x.id === id);
+      if (!p) return;
+
+      const cart = getCart();
+      const found = cart.find(x => x.id === id);
+
+      if (found) found.qty += 1;
+      else cart.push({ id: p.id, name: p.name, price: p.price, qty: 1 });
+
+      setCart(cart);
+      renderCart();
+      showScreen('cartScreen');
+    }
+
+    function updateQty(id, delta) {
+      const cart = getCart()
+        .map(i => i.id === id ? ({ ...i, qty: i.qty + delta }) : i)
+        .filter(i => i.qty > 0);
+
+      setCart(cart);
+      renderCart();
+    }
+
+    function renderCart() {
+      const cart = getCart();
+      const area = document.getElementById('cartItems');
+
+      if (!cart.length) {
+        area.innerHTML = '<div class="empty">Sepetinde ürün yok.</div>';
+        document.getElementById('cartTotal').textContent = formatPrice(0);
+        return;
+      }
+
+      area.innerHTML = cart.map(i => `<div class="history-card">
+        <div class="row-top">
+          <div>
+            <strong>${i.name}</strong>
+            <p class="muted" style="margin:6px 0 0">${formatPrice(i.price)} / adet</p>
+          </div>
+          <div class="qty-controls">
+            <button class="qty-btn" data-qty-change="${i.id}" data-qty-delta="-1">−</button>
+            <strong>${i.qty}</strong>
+            <button class="qty-btn" data-qty-change="${i.id}" data-qty-delta="1">+</button>
+            </div>
+        </div>
+        <div class="cart-line"><span>Ara toplam</span><strong>${formatPrice(i.price * i.qty)}</strong></div>
+      </div>`).join('');
+
+      document.getElementById('cartTotal').textContent =
+        formatPrice(cart.reduce((s, i) => s + i.price * i.qty, 0));
+    }
+
+    function selectedPaymentMethod() {
+      const el = document.querySelector('input[name="paymentMethod"]:checked');
+      return el ? el.value : 'Kapıda ödeme';
+    }
+
+    function sendOrder() {
+      const cart = getCart();
+      if (!cart.length) {
+        alert('Önce sepete ürün ekleyin.');
+        return;
+      }
+
+      const name = document.getElementById('checkoutName').value || 'Müşteri';
+      const phone = document.getElementById('checkoutPhone').value || '-';
+      const address = document.getElementById('checkoutAddress').value || '-';
+      const payment = selectedPaymentMethod();
+
+      setProfile({ name, phone, address });
+      hydrateProfile();
+
+      const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      const lines = cart.map(i => `${i.name} x${i.qty} = ${formatPrice(i.price * i.qty)}`).join('\n');
+      const orders = getOrders();
+      orders.unshift({
+        id: Date.now(),
+        name,
+        phone,
+        address,
+        payment,
+        total,
+        createdAt: new Date().toLocaleString('tr-TR'),
+        status: 'Sipariş Alındı'
+      });
+      setOrders(orders);
+
+      setCart([]);
+      renderCart();
+
+      const message = [
+        'Merhaba, Sukolik uygulamasından sipariş vermek istiyorum.',
+        '',
+        'Ad Soyad: ' + name,
+        'Telefon: ' + phone,
+        'Adres: ' + address,
+        'Ödeme: ' + payment,
+        '',
+        'Ürünler:',
+        lines,
+        '',
+        'Toplam: ' + formatPrice(total)
+      ].join('\n');
+
+      window.open('https://wa.me/' + PHONE_NUMBER + '?text=' + encodeURIComponent(message), '_blank');
+      showScreen('profileScreen');
+    }
+
+    function submitService() {
+      const name = document.getElementById('serviceName').value || 'Müşteri';
+      const phone = document.getElementById('servicePhone').value || '-';
+      const type = document.getElementById('serviceType').value;
+      const note = document.getElementById('serviceNote').value || '-';
+
+      const services = getServices();
+      services.unshift({
+        id: Date.now(),
+        name,
+        phone,
+        type,
+        note,
+        createdAt: new
+          Date().toLocaleString('tr-TR'),
+        status: 'Talep Alındı'
+      });
+      setServices(services);
+
+      const msg = [
+        'Merhaba, servis talebi oluşturmak istiyorum.',
+        '',
+        'Ad Soyad: ' + name,
+        'Telefon: ' + phone,
+        'Talep Türü: ' + type,
+        'Not: ' + note
+      ].join('\n');
+
+      window.open('https://wa.me/' + PHONE_NUMBER + '?text=' + encodeURIComponent(msg), '_blank');
+      document.getElementById('serviceNote').value = '';
+      renderProfile();
+      showScreen('profileScreen');
+    }
+
+    function renderProfile() {
+      hydrateProfile();
+
+      const orders = getOrders();
+      const services = getServices();
+
+      document.getElementById('orderHistory').innerHTML =
+        orders.length
+          ? orders.map(o => `<div class="history-card">
+              <div class="badge">Sipariş</div>
+              <div class="row"><strong>${formatPrice(o.total)}</strong><span class="status">${o.status}</span></div>
+              <p class="muted" style="margin:10px 0 0">${o.createdAt}</p>
+              <p class="muted" style="margin:6px 0 0">Ödeme: ${o.payment}</p>
+            </div>`).join('')
+          : '<div class="empty">Henüz sipariş geçmişi yok.</div>';
+
+     document.getElementById('serviceHistory').innerHTML =
+        services.length
+          ? services.map(s => `<div class="history-card">
+              <div class="badge">${s.type}</div>
+              <p style="margin:0">${s.note}</p>
+              <p class="muted" style="margin:10px 0 0">${s.createdAt}</p>
+              <span class="status">${s.status}</span>
+            </div>`).join('')
+          : '<div class="empty">Henüz servis geçmişi yok.</div>';
+    }
+
+    function clearAdminForm() {
+      editingProductId = null;
+      document.getElementById('adminProductName').value = '';
+      document.getElementById('adminProductCategory').value = 'Cihaz';
+      document.getElementById('adminProductPrice').value = '';
+      document.getElementById('adminProductBadge').value = '';
+      document.getElementById('adminProductImage').value = '';
+      document.getElementById('adminProductFeature').value = '';
+      document.getElementById('adminProductDetails').value = '';
+      document.getElementById('saveProductBtn').textContent = 'Ürünü Kaydet';
+    }
+    function fillAdminForm(product) {
+      editingProductId = product.id;
+      document.getElementById('adminProductName').value = product.name;
+      document.getElementById('adminProductCategory').value = product.category;
+      document.getElementById('adminProductPrice').value = product.price;
+      document.getElementById('adminProductBadge').value = product.badge;
+      document.getElementById('adminProductImage').value = product.image;
+      document.getElementById('adminProductFeature').value = product.feature;
+      document.getElementById('adminProductDetails').value = product.details.join('\n');
+      document.getElementById('saveProductBtn').textContent = 'Ürünü Güncelle';
+      showScreen('adminPanelScreen');
+    }
+
+    function saveProductFromForm() {
+      const name = document.getElementById('adminProductName').value.trim();
+      const category = document.getElementById('adminProductCategory').value;
+      const price = Number(document.getElementById('adminProductPrice').value || 0);
+      const badge = document.getElementById('adminProductBadge').value.trim() || 'Yeni';
+      const image = document.getElementById('adminProductImage').value.trim() || 'https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&w=700&q=60';
+      const feature = document.getElementById('adminProductFeature').value.trim() || 'Kısa açıklama';
+      const details = document.getElementById('adminProductDetails').value
+        .split('\n')
+        .map(x => x.trim())
+        .filter(Boolean);
+      if (!name || !price) {
+        alert('Ürün adı ve fiyat zorunlu.');
+        return;
+      }
+
+      const products = getProducts();
+
+      if (editingProductId) {
+        const idx = products.findIndex(p => p.id === editingProductId);
+        if (idx !== -1) {
+          products[idx] = {
+            ...products[idx],
+            name,
+            category,
+            price,
+            badge,
+            image,
+            feature,
+            details: details.length ? details : ['Detay bilgisi']
+          };
+        }
+      } else {
+        const newId = products.length ? Math.max(...products.map(p => p.id)) + 1 : 1;
+        products.unshift({
+          id: newId,
+          name,
+          category,
+          price,
+          badge,
+          image,
+          feature,
+          details: details.length ? details : ['Detay bilgisi']
+        });
+      }
+
+      setProducts(products);
+      clearAdminForm();
+      renderAdminPanel();
+      renderFeatured();
+      renderCatalog();
+      alert('Ürün kaydedildi.');
+    }
+
+    function deleteProduct(id) {
+      const products = getProducts().filter(p => p.id !== id);
+      setProducts(products);
+      renderAdminPanel();
+      renderFeatured();
+      renderCatalog();
+    }
+
+    function renderAdminPanel() {
+      const products = getProducts();
+      const orders = getOrders();
+      const services = getServices();
+      document.getElementById('adminProductList').innerHTML =
+        products.length
+          ? products.map(p => `<div class="history-card">
+              <div class="row-top">
+                <div>
+                  <strong>${p.name}</strong>
+                  <p class="muted" style="margin:6px 0 0">${p.category} • ${formatPrice(p.price)}</p>
+                </div>
+                <span class="badge">${p.badge}</span>
+              </div>
+              <p class="muted" style="margin:10px 0 0">${p.feature}</p>
+              <div class="list-actions">
+                <button class="btn light small" data-edit-product="${p.id}">Düzenle</button>
+                <button class="btn danger small" data-delete-product="${p.id}">Sil</button>
+              </div>
+            </div>`).join('')
+          : '<div class="empty">Henüz ürün yok.</div>';
+
+      document.getElementById('adminOrders').innerHTML =
+        orders.length
+          ? orders.map(o => `<div class="history-card">
+              <strong>${o.name}</strong>
+              <p class="muted" style="margin:8px 0 0">${o.createdAt}</p>
+              <p class="muted" style="margin:8px 0 0">Toplam: ${formatPrice(o.total)}</p>
+              <p class="muted" style="margin:8px 0 0">Ödeme: ${o.payment}</p>
+              <span class="status">${o.status}</span>
+            </div>`).join('')
+          : '<div class="empty">Henüz sipariş yok.</div>';
+      document.getElementById('adminServices').innerHTML =
+        services.length
+          ? services.map(s => `<div class="history-card">
+              <strong>${s.type}</strong>
+              <p class="muted" style="margin:8px 0 0">${s.createdAt}</p>
+              <p style="margin:8px 0 0">${s.note}</p>
+              <span class="status">${s.status}</span>
+            </div>`).join('')
+          : '<div class="empty">Henüz servis talebi yok.</div>';
+    }
+
+    document.getElementById('goCustomerBtn').addEventListener('click', () => showScreen('loginScreen'));
+    document.getElementById('goAdminBtn').addEventListener('click', () => showScreen('adminLoginScreen'));
+    document.getElementById('backRoleBtn').addEventListener('click', () => showScreen('roleScreen'));
+
+    document.getElementById('loginBtn').addEventListener('click', customerLogin);
+    document.getElementById('adminLoginBtn').addEventListener('click', adminLogin);
+    document.getElementById('adminLogoutBtn').addEventListener('click', adminLogout);
+    document.getElementById('saveProductBtn').addEventListener('click', saveProductFromForm);
+    document.getElementById('resetProductBtn').addEventListener('click', clearAdminForm);
+    document.getElementById('homeSearch').addEventListener('input', renderFeatured);
+    document.getElementById('catalogSearch').addEventListener('input', renderCatalog);
+    document.getElementById('categoryFilter').addEventListener('change', renderCatalog);
+    document.getElementById('campaignBtn').addEventListener('click', () => showScreen('campaignScreen'));
+
+    document.getElementById('checkoutBtn').addEventListener('click', () => {
+      if (!getCart().length) {
+        alert('Sepetin boş.');
+        return;
+      }
+      showScreen('checkoutScreen');
+    });
+
+    document.getElementById('sendOrderBtn').addEventListener('click', sendOrder);
+    document.getElementById('serviceSubmitBtn').addEventListener('click', submitService);
+
+    document.addEventListener('click', function(e) {
+      const nav = e.target.closest('[data-screen]');
+      if (nav) {
+        showScreen(nav.getAttribute('data-screen'));
+        return;
+      }
+
+      const add = e.target.closest('[data-add-product]');
+      if (add) {
+        addToCart(Number(add.getAttribute('data-add-product')));
+        return;
+      }
+
+      const open = e.target.closest('[data-open-product]');
+      if (open) {
+        openProduct(Number(open.getAttribute('data-open-product')));
+        return;
+      }
+
+      const qty = e.target.closest('[data-qty-change]');
+      if (qty) {
+        updateQty(
+         Number(qty.getAttribute('data-qty-change')),
+          Number(qty.getAttribute('data-qty-delta'))
+        );
+        return;
+      }
+
+      const editBtn = e.target.closest('[data-edit-product]');
+      if (editBtn) {
+        const product = getProducts().find(p => p.id === Number(editBtn.getAttribute('data-edit-product')));
+        if (product) fillAdminForm(product);
+        return;
+      }
+
+      const deleteBtn = e.target.closest('[data-delete-product]');
+      if (deleteBtn) {
+        deleteProduct(Number(deleteBtn.getAttribute('data-delete-product')));
+        return;
+      }
+    });
+
+    getProducts();
+
+    if (getProfile().name || getProfile().phone) {
+      document.getElementById('bottomNav').style.display = 'grid';
+      hydrateProfile();
+      showScreen('homeScreen');
+    } else {
+      showScreen('roleScreen');
+    }
+  </script>
 </body>
 </html>
+    
+    
+            
